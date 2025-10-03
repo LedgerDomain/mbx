@@ -2,6 +2,39 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "check workspace",
+			"type": "shell",
+			"command": "cargo",
+			"args": [
+				"check",
+				"--workspace",
+				"--all-features",
+				"--bins",
+				"--examples",
+				"--benches",
+				"--tests"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"options": {
+				"env": {}
+			},
+			"presentation": {
+				"clear": true,
+				"revealProblems": "onProblem"
+			},
+			"problemMatcher": [
+				{
+					"base": "$rustc",
+					"fileLocation": [
+						"relative"
+					]
+				}
+			]
+		},
+		{
 			"label": "check mbx",
 			"type": "shell",
 			"command": "cargo",
@@ -10,10 +43,7 @@
 				"--all-features",
 				"--tests"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"options": {
 				"env": {}
 			},
@@ -90,6 +120,60 @@
 			"args": [
 				"doc",
 				"--workspace",
+				"--all-features"
+			],
+			"group": "build",
+			"options": {
+				"env": {}
+			},
+			"presentation": {
+				"clear": true,
+				"revealProblems": "onProblem"
+			},
+			"problemMatcher": [
+				{
+					"base": "$rustc",
+					"fileLocation": [
+						"relative"
+					]
+				}
+			]
+		},
+		{
+			"label": "build mbx-bin",
+			"type": "shell",
+			"command": "cargo",
+			"args": [
+				"build",
+				"--package",
+				"mbx-bin",
+				"--all-features"
+			],
+			"group": "build",
+			"options": {
+				"env": {}
+			},
+			"presentation": {
+				"clear": true,
+				"revealProblems": "onProblem"
+			},
+			"problemMatcher": [
+				{
+					"base": "$rustc",
+					"fileLocation": [
+						"relative"
+					]
+				}
+			]
+		},
+		{
+			"label": "check mbx-bin",
+			"type": "shell",
+			"command": "cargo",
+			"args": [
+				"check",
+				"--package",
+				"mbx-bin",
 				"--all-features"
 			],
 			"group": "build",

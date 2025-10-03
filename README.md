@@ -2,6 +2,8 @@
 
 This Rust crate provides ergonomic types for working with strings that are multibase-encoded multihash and multikey values.  Versions of each type are provided that are analogous to the `String` and `str` types, with analogous semantics.
 
+Note that there is also a [`mbx-bin`](mbx-bin) crate that provides a CLI tool for computing `MBHash` values and decoding `MBHash`, `MBPubKey`, and `MBPrivKey` values.  This is useful for development, testing, and experimentation.
+
 ## Codec Categories
 
 A "codec" refers to an entry in the [multicodec registry](https://github.com/multiformats/multicodec/blob/master/table.csv).

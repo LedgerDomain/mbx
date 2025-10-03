@@ -1,8 +1,48 @@
 use mbx::MBPubKeyStr;
 
+fn test_mb_hash_placeholder_case(base: multibase::Base, codec: u64, digest_byte_v: &[u8]) {
+    use mbx::MBHash;
+
+    // NOTE: We use 64 here to accomodate the largest expected digest size (SHA2-512 is 64 bytes).
+    let mb_hash = MBHash::encoded::<64>(base, codec, digest_byte_v).expect("pass");
+    #[cfg(feature = "codec-str")]
+    {
+        println!(
+            "placeholder case: base: {:?}, codec: {} (0x{:02x}), mb_hash: {:?}",
+            base,
+            mbx::codec_str(codec).expect("pass"),
+            codec,
+            mb_hash
+        );
+    }
+    #[cfg(not(feature = "codec-str"))]
+    {
+        println!(
+            "placeholder case: base: {:?}, codec: 0x{:02x}, mb_hash: {:?}",
+            base, codec, mb_hash
+        );
+    }
+}
+
+#[test]
+fn test_mb_hash_placeholder() {
+    for base in [
+        multibase::Base::Base32Lower,
+        multibase::Base::Base58Btc,
+        multibase::Base::Base64Url,
+    ] {
+        test_mb_hash_placeholder_case(base, ssi_multicodec::BLAKE3, &[0u8; 32]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_256, &[0u8; 32]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_384, &[0u8; 48]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_512, &[0u8; 64]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_256, &[0u8; 32]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_512, &[0u8; 64]);
+    }
+}
+
 #[cfg(feature = "serde")]
 #[test]
-fn test_serde_mb_hash() {
+fn test_serde_mb_hash_placeholder() {
     use mbx::{MBHash, MBHashStr};
 
     let byte_v = vec![0u8; 32];
