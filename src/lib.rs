@@ -27,6 +27,8 @@ mod p384;
 mod p521;
 #[cfg(feature = "sha2")]
 mod sha2;
+#[cfg(feature = "sha3")]
+mod sha3;
 #[cfg(feature = "signature-dyn")]
 mod signature_dyn;
 

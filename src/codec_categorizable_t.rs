@@ -6,11 +6,6 @@ pub trait CodecCategorizableT: Clone {
     fn codec_category() -> CodecCategory;
 }
 
-/// The codec category sigil for hashes (specifically, multihashes).
-/// See <https://github.com/multiformats/multicodec/blob/master/table.csv> for specific codecs.
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct MultihashCategory;
-
 /// The codec category sigil for private keys.
 /// See <https://github.com/multiformats/multicodec/blob/master/table.csv> for specific codecs.
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -23,22 +18,15 @@ pub struct PubKeyCategory;
 
 /// The codec category sigil for signatures.
 /// See <https://github.com/multiformats/multicodec/blob/master/table.csv> for specific codecs.
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct SignatureCategory;
 
 /// The codec category sigil for symmetric keys.
 /// See <https://github.com/multiformats/multicodec/blob/master/table.csv> for specific codecs.
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct SymmetricKeyCategory;
-
-// #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-// pub struct Unspecified;
-
-impl CodecCategorizableT for MultihashCategory {
-    fn codec_category() -> CodecCategory {
-        CodecCategory::Multihash
-    }
-}
 
 impl CodecCategorizableT for PrivKeyCategory {
     fn codec_category() -> CodecCategory {

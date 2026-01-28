@@ -8,7 +8,7 @@ impl MBPubKeyStr {
         )?)
     }
     #[cfg(feature = "signature-dyn")]
-    pub fn to_verifier_bytes(&self) -> crate::Result<signature_dyn::VerifierBytes> {
+    pub fn to_verifier_bytes(&self) -> crate::Result<signature_dyn::VerifierBytes<'_>> {
         signature_dyn::VerifierBytes::try_from(self)
     }
 }

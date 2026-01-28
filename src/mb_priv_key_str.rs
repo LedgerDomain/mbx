@@ -9,7 +9,7 @@ impl MBPrivKeyStr {
         )?)
     }
     #[cfg(feature = "signature-dyn")]
-    pub fn to_signer_bytes(&self) -> Result<signature_dyn::SignerBytes> {
+    pub fn to_signer_bytes(&self) -> Result<signature_dyn::SignerBytes<'_>> {
         signature_dyn::SignerBytes::try_from(self)
     }
     pub fn pub_key(&self) -> Result<MBPubKey> {

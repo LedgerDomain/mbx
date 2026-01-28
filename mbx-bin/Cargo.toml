@@ -1,6 +1,6 @@
 [package]
 name = "mbx-bin"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Victor Dods <victor.dods@gmail.com>"]
 edition = "2024"
 
@@ -8,8 +8,9 @@ edition = "2024"
 blake3 = "1.8.2"
 clap = { version = "4.5.17", features = ["derive"] }
 digest = "0.10.7"
-mbx = { path = "..", features = ["blake3", "codec-str", "sha2"] }
+mbx = { path = "..", features = ["blake3", "codec-str", "sha2", "sha3"] }
 sha2 = "0.10.9"
+sha3 = "0.10.8"
 ssi-multicodec = "0.2.0"
 
 [[bin]]

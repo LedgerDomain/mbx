@@ -32,10 +32,13 @@ fn test_mb_hash_placeholder() {
         multibase::Base::Base64Url,
     ] {
         test_mb_hash_placeholder_case(base, ssi_multicodec::BLAKE3, &[0u8; 32]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_224, &[0u8; 28]);
         test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_256, &[0u8; 32]);
         test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_384, &[0u8; 48]);
         test_mb_hash_placeholder_case(base, ssi_multicodec::SHA2_512, &[0u8; 64]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_224, &[0u8; 28]);
         test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_256, &[0u8; 32]);
+        test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_384, &[0u8; 48]);
         test_mb_hash_placeholder_case(base, ssi_multicodec::SHA3_512, &[0u8; 64]);
     }
 }
@@ -145,7 +148,7 @@ fn test_generate_some_hashes() {
         ] {
             let mut hasher = sha2::Sha256::new();
             hasher.update(b"HIPPO");
-            let mb_hash = mbx::MBHash::from_sha2_256(base, hasher);
+            let mb_hash = mbx::MBHash::from_sha256(base, hasher);
             println!("sha2_256; base: {:?}, mb_hash: {:?}", base, mb_hash);
         }
         for base in [
@@ -157,7 +160,7 @@ fn test_generate_some_hashes() {
         ] {
             let mut hasher = sha2::Sha384::new();
             hasher.update(b"HIPPO");
-            let mb_hash = mbx::MBHash::from_sha2_384(base, hasher);
+            let mb_hash = mbx::MBHash::from_sha384(base, hasher);
             println!("sha2_384; base: {:?}, mb_hash: {:?}", base, mb_hash);
         }
         for base in [
@@ -169,7 +172,7 @@ fn test_generate_some_hashes() {
         ] {
             let mut hasher = sha2::Sha512::new();
             hasher.update(b"HIPPO");
-            let mb_hash = mbx::MBHash::from_sha2_512(base, hasher);
+            let mb_hash = mbx::MBHash::from_sha512(base, hasher);
             println!("sha2_512; base: {:?}, mb_hash: {:?}", base, mb_hash);
         }
     }

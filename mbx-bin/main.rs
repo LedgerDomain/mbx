@@ -54,21 +54,32 @@ fn base_from_str(s: &str) -> Result<mbx::Base, mbx::Error> {
     }
 }
 
+#[allow(non_camel_case_types)]
 #[derive(clap::ValueEnum, Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum HashFunction {
     Blake3,
-    Sha2_256,
-    Sha2_384,
-    Sha2_512,
+    Sha_224,
+    Sha_256,
+    Sha_384,
+    Sha_512,
+    Sha3_224,
+    Sha3_256,
+    Sha3_384,
+    Sha3_512,
 }
 
 impl HashFunction {
     fn new_hasher(&self) -> Hasher {
         match self {
             HashFunction::Blake3 => Hasher::Blake3(blake3::Hasher::new()),
-            HashFunction::Sha2_256 => Hasher::Sha2_256(sha2::Sha256::default()),
-            HashFunction::Sha2_384 => Hasher::Sha2_384(sha2::Sha384::default()),
-            HashFunction::Sha2_512 => Hasher::Sha2_512(sha2::Sha512::default()),
+            HashFunction::Sha_224 => Hasher::Sha_224(sha2::Sha224::default()),
+            HashFunction::Sha_256 => Hasher::Sha_256(sha2::Sha256::default()),
+            HashFunction::Sha_384 => Hasher::Sha_384(sha2::Sha384::default()),
+            HashFunction::Sha_512 => Hasher::Sha_512(sha2::Sha512::default()),
+            HashFunction::Sha3_224 => Hasher::Sha3_224(sha3::Sha3_224::default()),
+            HashFunction::Sha3_256 => Hasher::Sha3_256(sha3::Sha3_256::default()),
+            HashFunction::Sha3_384 => Hasher::Sha3_384(sha3::Sha3_384::default()),
+            HashFunction::Sha3_512 => Hasher::Sha3_512(sha3::Sha3_512::default()),
         }
     }
 }
@@ -79,11 +90,17 @@ impl Default for HashFunction {
     }
 }
 
+#[allow(non_camel_case_types)]
 pub enum Hasher {
     Blake3(blake3::Hasher),
-    Sha2_256(sha2::Sha256),
-    Sha2_384(sha2::Sha384),
-    Sha2_512(sha2::Sha512),
+    Sha_224(sha2::Sha224),
+    Sha_256(sha2::Sha256),
+    Sha_384(sha2::Sha384),
+    Sha_512(sha2::Sha512),
+    Sha3_224(sha3::Sha3_224),
+    Sha3_256(sha3::Sha3_256),
+    Sha3_384(sha3::Sha3_384),
+    Sha3_512(sha3::Sha3_512),
 }
 
 impl Hasher {
@@ -93,17 +110,27 @@ impl Hasher {
             Hasher::Blake3(hasher) => {
                 hasher.update(data);
             }
-            Hasher::Sha2_256(hasher) => hasher.update(data),
-            Hasher::Sha2_384(hasher) => hasher.update(data),
-            Hasher::Sha2_512(hasher) => hasher.update(data),
+            Hasher::Sha_224(hasher) => hasher.update(data),
+            Hasher::Sha_256(hasher) => hasher.update(data),
+            Hasher::Sha_384(hasher) => hasher.update(data),
+            Hasher::Sha_512(hasher) => hasher.update(data),
+            Hasher::Sha3_224(hasher) => hasher.update(data),
+            Hasher::Sha3_256(hasher) => hasher.update(data),
+            Hasher::Sha3_384(hasher) => hasher.update(data),
+            Hasher::Sha3_512(hasher) => hasher.update(data),
         }
     }
     fn into_mb_hash(self, base: mbx::Base) -> mbx::MBHash {
         match self {
             Hasher::Blake3(hasher) => mbx::MBHash::from_blake3(base, hasher),
-            Hasher::Sha2_256(hasher) => mbx::MBHash::from_sha2_256(base, hasher),
-            Hasher::Sha2_384(hasher) => mbx::MBHash::from_sha2_384(base, hasher),
-            Hasher::Sha2_512(hasher) => mbx::MBHash::from_sha2_512(base, hasher),
+            Hasher::Sha_224(hasher) => mbx::MBHash::from_sha224(base, hasher),
+            Hasher::Sha_256(hasher) => mbx::MBHash::from_sha256(base, hasher),
+            Hasher::Sha_384(hasher) => mbx::MBHash::from_sha384(base, hasher),
+            Hasher::Sha_512(hasher) => mbx::MBHash::from_sha512(base, hasher),
+            Hasher::Sha3_224(hasher) => mbx::MBHash::from_sha3_224(base, hasher),
+            Hasher::Sha3_256(hasher) => mbx::MBHash::from_sha3_256(base, hasher),
+            Hasher::Sha3_384(hasher) => mbx::MBHash::from_sha3_384(base, hasher),
+            Hasher::Sha3_512(hasher) => mbx::MBHash::from_sha3_512(base, hasher),
         }
     }
 }
@@ -199,6 +226,8 @@ struct Hash {
     /// base58flickr, base58btc, base64, base64pad, base64url, base64urlpad, base256emoji.
     #[arg(short, long, default_value = "base64url", value_parser = base_from_str)]
     base: mbx::Base,
+    /// The hash function to use.  Note that sha-224, sha-256, sha-384, and sha-512 are all
+    /// part of the SHA-2 family of hash functions.
     #[arg(short = 'f', long, default_value = "blake3")]
     hash_function: HashFunction,
 }
