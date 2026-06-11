@@ -413,9 +413,8 @@ fn test_mb_pub_key_longest_common_prefix_ed25519_dalek() {
 }
 
 fn generate_ed448_goldilocks_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let signing_key = ed448_goldilocks::SigningKey::generate(&mut rand_0_9::rand_core::UnwrapMut(
-        &mut rand_0_9::rngs::OsRng,
-    ));
+    use ed448_goldilocks::elliptic_curve::Generate;
+    let signing_key = ed448_goldilocks::SigningKey::generate();
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_ed448_goldilocks_verifying_key(base, &verifying_key)
 }
@@ -477,9 +476,8 @@ fn test_mb_pub_key_longest_common_prefix_p384() {
 }
 
 fn generate_p521_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let signing_key = p521::ecdsa::SigningKey::random(&mut rand_0_9::rand_core::UnwrapMut(
-        &mut rand_0_9::rngs::OsRng,
-    ));
+    use p521::elliptic_curve::Generate;
+    let signing_key = p521::ecdsa::SigningKey::generate();
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_p521_verifying_key(base, &verifying_key)
 }

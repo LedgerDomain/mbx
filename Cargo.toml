@@ -33,7 +33,7 @@ signature-dyn = ["dep:signature-dyn"]
 [dependencies]
 blake3 = { version = "1.8.2", optional = true }
 ed25519-dalek = { version = "2.2.0", optional = true }
-ed448-goldilocks = { version = "0.14.0-pre.4", optional = true }
+ed448-goldilocks = { version = "0.14.0-pre.13", optional = true }
 k256 = { version = "0.13.4", optional = true }
 multibase = "0.9.1"
 multihash = "0.19.3"
@@ -55,7 +55,6 @@ ed25519-dalek = { version = "2.2.0", features = ["digest", "rand_core"] }
 hex-literal = "1.0.0"
 # This version is needed for compatibility with k256::ecdsa::SigningKey
 rand = "0.8.5"
-rand_0_9 = { package = "rand", version = "0.9.2", features = ["os_rng"] }
 serde_json = "1.0.143"
 signature = "2.2.0"
 

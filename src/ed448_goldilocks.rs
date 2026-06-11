@@ -80,9 +80,8 @@ mod tests {
     use crate::{Base, MBPubKey};
 
     fn test_ed448_goldilocks_encode_decode_mb_pub_key_case(base: Base) {
-        let signing_key = ed448_goldilocks::SigningKey::generate(
-            &mut rand_0_9::rand_core::UnwrapMut(&mut rand_0_9::rngs::OsRng),
-        );
+        use ed448_goldilocks::elliptic_curve::Generate;
+        let signing_key = ed448_goldilocks::SigningKey::generate();
         let verifying_key = signing_key.verifying_key();
 
         let mb_pub_key = MBPubKey::from_ed448_goldilocks_verifying_key(base, &verifying_key);

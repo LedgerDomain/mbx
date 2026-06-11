@@ -75,9 +75,8 @@ mod tests {
 
     fn test_p521_encode_decode_case(base: Base) {
         for _ in 0..10 {
-            let signing_key = p521::ecdsa::SigningKey::random(&mut rand_0_9::rand_core::UnwrapMut(
-                &mut rand_0_9::rngs::OsRng,
-            ));
+            use p521::elliptic_curve::Generate;
+            let signing_key = p521::ecdsa::SigningKey::generate();
             let verifying_key = signing_key.verifying_key();
 
             let mb_pub_key = MBPubKey::from_p521_verifying_key(base, &verifying_key);

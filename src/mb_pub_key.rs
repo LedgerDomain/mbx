@@ -50,7 +50,7 @@ impl MBPubKey {
         base: crate::Base,
         verifying_key: &p521::ecdsa::VerifyingKey,
     ) -> Self {
-        let encoded_point = verifying_key.to_encoded_point(true);
+        let encoded_point = verifying_key.to_sec1_point(true);
         let compressed_bytes = encoded_point.as_bytes();
         debug_assert_eq!(compressed_bytes.len(), 67);
         MBPubKey::encoded(base, ssi_multicodec::P521_PUB, compressed_bytes).unwrap()
