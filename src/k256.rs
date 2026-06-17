@@ -74,9 +74,9 @@ mod tests {
     use crate::{Base, MBPrivKey, MBPubKey};
 
     fn test_k256_encode_decode_case(base: Base) {
-        let mut rng = rand::rngs::OsRng;
         for _ in 0..10 {
-            let signing_key = k256::ecdsa::SigningKey::random(&mut rng);
+            use k256::elliptic_curve::Generate;
+            let signing_key = k256::ecdsa::SigningKey::generate();
             let verifying_key = signing_key.verifying_key();
 
             let mb_pub_key = MBPubKey::from_k256_verifying_key(base, &verifying_key);

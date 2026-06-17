@@ -20,13 +20,6 @@ impl std::fmt::Display for Error {
 
 impl std::error::Error for Error {}
 
-#[cfg(feature = "ed25519-dalek")]
-impl From<ed25519_dalek::ed25519::Error> for Error {
-    fn from(e: ed25519_dalek::ed25519::Error) -> Self {
-        Self::from_cow(e.to_string().into())
-    }
-}
-
 impl From<multibase::Error> for Error {
     fn from(e: multibase::Error) -> Self {
         Self::from_cow(e.to_string().into())
@@ -39,9 +32,17 @@ impl From<multihash::Error> for Error {
     }
 }
 
-#[cfg(feature = "p521")]
-impl From<p521::ecdsa::Error> for Error {
-    fn from(e: p521::ecdsa::Error) -> Self {
+#[cfg(any(
+    feature = "ed25519-dalek",
+    feature = "ed448-goldilocks",
+    feature = "k256",
+    feature = "p256",
+    feature = "p384",
+    feature = "p521",
+    feature = "signature"
+))]
+impl From<signature::Error> for Error {
+    fn from(e: signature::Error) -> Self {
         Self::from_cow(e.to_string().into())
     }
 }

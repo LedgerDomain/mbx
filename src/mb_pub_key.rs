@@ -20,7 +20,7 @@ impl MBPubKey {
         base: crate::Base,
         verifying_key: &k256::ecdsa::VerifyingKey,
     ) -> Self {
-        let encoded_point = verifying_key.to_encoded_point(true);
+        let encoded_point = verifying_key.to_sec1_point(true);
         let compressed_bytes = encoded_point.as_bytes();
         debug_assert_eq!(compressed_bytes.len(), 33);
         MBPubKey::encoded(base, ssi_multicodec::SECP256K1_PUB, compressed_bytes).unwrap()
@@ -30,7 +30,7 @@ impl MBPubKey {
         base: crate::Base,
         verifying_key: &p256::ecdsa::VerifyingKey,
     ) -> Self {
-        let encoded_point = verifying_key.to_encoded_point(true);
+        let encoded_point = verifying_key.to_sec1_point(true);
         let compressed_bytes = encoded_point.as_bytes();
         debug_assert_eq!(compressed_bytes.len(), 33);
         MBPubKey::encoded(base, ssi_multicodec::P256_PUB, compressed_bytes).unwrap()
@@ -40,7 +40,7 @@ impl MBPubKey {
         base: crate::Base,
         verifying_key: &p384::ecdsa::VerifyingKey,
     ) -> Self {
-        let encoded_point = verifying_key.to_encoded_point(true);
+        let encoded_point = verifying_key.to_sec1_point(true);
         let compressed_bytes = encoded_point.as_bytes();
         debug_assert_eq!(compressed_bytes.len(), 49);
         MBPubKey::encoded(base, ssi_multicodec::P384_PUB, compressed_bytes).unwrap()

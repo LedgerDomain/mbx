@@ -29,9 +29,8 @@ mod tests {
 
     fn test_sha3_224_encode_case(base: Base) {
         use sha3::Digest;
-        let mut hasher = sha3::Sha3_224::new();
-        use std::io::Write;
-        hasher.write_all(b"HIPPO").unwrap();
+        let mut hasher = sha3::Sha3_224::default();
+        hasher.update(b"HIPPO");
         let mb_hash = MBHash::from_sha3_224(base, hasher);
         println!("sha3_224; base: {:?}, mb_hash: {:?}", base, mb_hash);
     }
@@ -45,9 +44,8 @@ mod tests {
 
     fn test_sha3_256_encode_case(base: Base) {
         use sha3::Digest;
-        let mut hasher = sha3::Sha3_256::new();
-        use std::io::Write;
-        hasher.write_all(b"HIPPO").unwrap();
+        let mut hasher = sha3::Sha3_256::default();
+        hasher.update(b"HIPPO");
         let mb_hash = MBHash::from_sha3_256(base, hasher);
         println!("sha3_256; base: {:?}, mb_hash: {:?}", base, mb_hash);
     }
@@ -61,9 +59,8 @@ mod tests {
 
     fn test_sha3_384_encode_case(base: Base) {
         use sha3::Digest;
-        let mut hasher = sha3::Sha3_384::new();
-        use std::io::Write;
-        hasher.write_all(b"HIPPO").unwrap();
+        let mut hasher = sha3::Sha3_384::default();
+        hasher.update(b"HIPPO");
         let mb_hash = MBHash::from_sha3_384(base, hasher);
         println!("sha3_384; base: {:?}, mb_hash: {:?}", base, mb_hash);
     }
@@ -77,9 +74,8 @@ mod tests {
 
     fn test_sha3_512_encode_case(base: Base) {
         use sha3::Digest;
-        let mut hasher = sha3::Sha3_512::new();
-        use std::io::Write;
-        hasher.write_all(b"HIPPO").unwrap();
+        let mut hasher = sha3::Sha3_512::default();
+        hasher.update(b"HIPPO");
         let mb_hash = MBHash::from_sha3_512(base, hasher);
         println!("sha3_512; base: {:?}, mb_hash: {:?}", base, mb_hash);
     }

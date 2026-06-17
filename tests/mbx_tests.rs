@@ -146,7 +146,7 @@ fn test_generate_some_hashes() {
             mbx::Base::Base58Btc,
             mbx::Base::Base64Url,
         ] {
-            let mut hasher = sha2::Sha256::new();
+            let mut hasher = sha2::Sha256::default();
             hasher.update(b"HIPPO");
             let mb_hash = mbx::MBHash::from_sha256(base, hasher);
             println!("sha2_256; base: {:?}, mb_hash: {:?}", base, mb_hash);
@@ -158,7 +158,7 @@ fn test_generate_some_hashes() {
             mbx::Base::Base58Btc,
             mbx::Base::Base64Url,
         ] {
-            let mut hasher = sha2::Sha384::new();
+            let mut hasher = sha2::Sha384::default();
             hasher.update(b"HIPPO");
             let mb_hash = mbx::MBHash::from_sha384(base, hasher);
             println!("sha2_384; base: {:?}, mb_hash: {:?}", base, mb_hash);
@@ -170,7 +170,7 @@ fn test_generate_some_hashes() {
             mbx::Base::Base58Btc,
             mbx::Base::Base64Url,
         ] {
-            let mut hasher = sha2::Sha512::new();
+            let mut hasher = sha2::Sha512::default();
             hasher.update(b"HIPPO");
             let mb_hash = mbx::MBHash::from_sha512(base, hasher);
             println!("sha2_512; base: {:?}, mb_hash: {:?}", base, mb_hash);
@@ -380,7 +380,7 @@ fn compute_mb_pub_key_longest_common_prefixes(
 }
 
 fn generate_ed25519_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let mut rng = rand::rngs::OsRng;
+    let mut rng = rand::rand_core::UnwrapErr(rand::rngs::SysRng);
     let signing_key = ed25519_dalek::SigningKey::generate(&mut rng);
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_ed25519_dalek_verifying_key(base, &verifying_key)
@@ -434,8 +434,8 @@ fn test_mb_pub_key_longest_common_prefix_ed448_goldilocks() {
 }
 
 fn generate_p256_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let mut rng = rand::rngs::OsRng;
-    let signing_key = p256::ecdsa::SigningKey::random(&mut rng);
+    use p256::elliptic_curve::Generate;
+    let signing_key = p256::ecdsa::SigningKey::generate();
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_p256_verifying_key(base, &verifying_key)
 }
@@ -455,8 +455,8 @@ fn test_mb_pub_key_longest_common_prefix_p256() {
 }
 
 fn generate_p384_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let mut rng = rand::rngs::OsRng;
-    let signing_key = p384::ecdsa::SigningKey::random(&mut rng);
+    use p384::elliptic_curve::Generate;
+    let signing_key = p384::ecdsa::SigningKey::generate();
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_p384_verifying_key(base, &verifying_key)
 }
@@ -497,8 +497,8 @@ fn test_mb_pub_key_longest_common_prefix_p521() {
 }
 
 fn generate_secp256k1_pub_key(base: mbx::Base) -> mbx::MBPubKey {
-    let mut rng = rand::rngs::OsRng;
-    let signing_key = k256::ecdsa::SigningKey::random(&mut rng);
+    use k256::elliptic_curve::Generate;
+    let signing_key = k256::ecdsa::SigningKey::generate();
     let verifying_key = signing_key.verifying_key();
     mbx::MBPubKey::from_k256_verifying_key(base, &verifying_key)
 }

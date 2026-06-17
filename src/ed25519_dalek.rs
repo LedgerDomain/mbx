@@ -73,7 +73,7 @@ mod tests {
     use crate::{Base, MBPrivKey, MBPubKey};
 
     fn test_ed25519_dalek_encode_decode_case(base: Base) {
-        let mut rng = rand::rngs::OsRng;
+        let mut rng = rand::rand_core::UnwrapErr(rand::rngs::SysRng);
         let signing_key = ed25519_dalek::SigningKey::generate(&mut rng);
         let verifying_key = signing_key.verifying_key();
 

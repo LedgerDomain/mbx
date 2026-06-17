@@ -74,9 +74,9 @@ mod tests {
     use crate::{Base, MBPrivKey, MBPubKey};
 
     fn test_p384_encode_decode_case(base: Base) {
-        let mut rng = rand::rngs::OsRng;
         for _ in 0..10 {
-            let signing_key = p384::ecdsa::SigningKey::random(&mut rng);
+            use p384::elliptic_curve::Generate;
+            let signing_key = p384::ecdsa::SigningKey::generate();
             let verifying_key = signing_key.verifying_key();
 
             let mb_pub_key = MBPubKey::from_p384_verifying_key(base, &verifying_key);
