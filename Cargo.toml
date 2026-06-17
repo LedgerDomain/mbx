@@ -1,6 +1,6 @@
 [package]
 name = "mbx"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Victor Dods <victor.dods@gmail.com>"]
 edition = "2024"
 
@@ -33,37 +33,55 @@ signature = ["dep:signature"]
 signature-dyn = ["dep:signature-dyn"]
 
 [dependencies]
-blake3 = { version = "1.8.2", optional = true }
-ed25519-dalek = { version = "3.0.0-rc.0", optional = true }
-ed448-goldilocks = { version = "0.14.0-pre.13", optional = true }
-k256 = { version = "0.14.0-rc.11", optional = true }
-multibase = "0.9.1"
-multihash = "0.19.3"
-p256 = { version = "0.14.0-rc.11", optional = true }
-p384 = { version = "0.14.0-rc.11", optional = true }
-p521 = { version = "0.14.0-rc.11", optional = true }
-pneutype = "0.5.1"
-serde = { version = "1.0.219", optional = true, features = ["derive"] }
-sha2 = { version = "0.11.0", optional = true }
-sha3 = { version = "0.12.0", optional = true }
-signature = { version = "3.0.0", optional = true }
-signature-dyn = { version = "0.2.0", optional = true, features = [
+blake3 = { workspace = true, optional = true }
+ed25519-dalek = { workspace = true, optional = true }
+ed448-goldilocks = { workspace = true, optional = true }
+k256 = { workspace = true, optional = true }
+multibase = { workspace = true }
+multihash = { workspace = true }
+p256 = { workspace = true, optional = true }
+p384 = { workspace = true, optional = true }
+p521 = { workspace = true, optional = true }
+pneutype = { workspace = true }
+serde = { workspace = true, optional = true, features = ["derive"] }
+sha2 = { workspace = true, optional = true }
+sha3 = { workspace = true, optional = true }
+signature = { workspace = true, optional = true }
+signature-dyn = { workspace = true, optional = true, features = [
     "ssi-multicodec",
 ] }
-ssi-multicodec = "0.2.0"
+ssi-multicodec = { workspace = true }
 
 [dev-dependencies]
-digest = "0.11.0"
-ed25519-dalek = { version = "3.0.0-rc.0", features = ["digest", "rand_core"] }
-hex-literal = "1.0.0"
-# This version is needed for compatibility with k256::ecdsa::SigningKey
-rand = { version = "0.10.1", features = ["sys_rng"] }
-serde_json = "1.0.143"
-signature = "3.0.0"
-
-[patch.crates-io]
-pneutype = { git = "https://github.com/vdods/pneutype", rev = "pneutype-v0.5.1" }
-signature-dyn = { git = "https://github.com/LedgerDomain/signature-dyn", rev = "signature-dyn-v0.2.0" }
+digest = { workspace = true }
+ed25519-dalek = { workspace = true, features = ["digest", "rand_core"] }
+hex-literal = { workspace = true }
+rand = { workspace = true, features = ["sys_rng"] }
+serde_json = { workspace = true }
+signature = { workspace = true }
 
 [workspace]
 members = [".", "mbx-bin"]
+
+[workspace.dependencies]
+blake3 = "1.8.2"
+clap = "4.5.17"
+digest = "0.11.0"
+ed25519-dalek = "3.0.0-rc.0"
+ed448-goldilocks = "0.14.0-pre.13"
+hex-literal = "1.0.0"
+k256 = "0.14.0-rc.11"
+multibase = "0.9.1"
+multihash = "0.19.3"
+p256 = "0.14.0-rc.11"
+p384 = "0.14.0-rc.11"
+p521 = "0.14.0-rc.11"
+pneutype = { git = "https://github.com/vdods/pneutype", rev = "pneutype-v0.5.1" }
+rand = "0.10.1"
+serde = "1.0.219"
+serde_json = "1.0.143"
+sha2 = "0.11.0"
+sha3 = "0.12.0"
+signature = "3.0.0"
+signature-dyn = { git = "https://github.com/LedgerDomain/signature-dyn", rev = "signature-dyn-v0.2.0" }
+ssi-multicodec = "0.2.0"
