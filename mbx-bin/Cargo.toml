@@ -1,6 +1,6 @@
 [package]
 name = "mbx-bin"
-version = "0.2.3"
+version = "0.3.0"
 authors = ["Victor Dods <victor.dods@gmail.com>"]
 edition = "2024"
 
