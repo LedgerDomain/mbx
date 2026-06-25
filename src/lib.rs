@@ -34,27 +34,20 @@ mod signature_dyn;
 
 #[cfg(feature = "codec-str")]
 pub use codec_str::codec_str;
+pub(crate) use mbx_str::mbx_str_validate_impl;
 pub use {
     codec_categorizable_t::{CodecCategorizableT, PrivKeyCategory, PubKeyCategory},
     codec_category::CodecCategory,
     error::Error,
     mb_hash::MBHash,
     mb_hash_str::MBHashStr,
+    mb_priv_key::MBPrivKey,
+    mb_priv_key_str::MBPrivKeyStr,
+    mb_pub_key::MBPubKey,
+    mb_pub_key_str::MBPubKeyStr,
     mbx::MBX,
     mbx_str::MBXStr,
 };
-/// This newtype is a String representing a secretKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
-/// See also `MBPrivKeyStr`.
-pub type MBPrivKey = MBX<PrivKeyCategory>;
-/// This newtype is a str representing a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
-/// See also `MBPrivKey`.
-pub type MBPrivKeyStr = MBXStr<PrivKeyCategory>;
-/// This newtype is a String representing a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
-/// See also `MBPubKeyStr`.
-pub type MBPubKey = MBX<PubKeyCategory>;
-/// This newtype is a str representing a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
-/// See also `MBPubKey`.
-pub type MBPubKeyStr = MBXStr<PubKeyCategory>;
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Defines the various available base-encodings.  The recommended base-encoding is Base::Base64Url.
@@ -66,14 +59,6 @@ pub type Multihash<const SIZE: usize> = multihash::Multihash<SIZE>;
 /// a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
 pub type MultiEncodedBuf = ssi_multicodec::MultiEncodedBuf;
 
-impl MBPrivKey {
-    pub fn as_mb_priv_key_str(&self) -> &MBPrivKeyStr {
-        self.as_mbx_str()
-    }
-}
-
-impl MBPubKey {
-    pub fn as_mb_pub_key_str(&self) -> &MBPubKeyStr {
-        self.as_mbx_str()
-    }
-}
+/// TEMPORARY until ssi_multicodec supports the ED448_PRIV codec.
+/// See https://github.com/multiformats/multicodec/pull/390
+pub(crate) const ED448_PRIV_CODEC: u64 = 0x1311;

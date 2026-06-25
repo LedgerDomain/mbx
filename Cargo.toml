@@ -1,6 +1,6 @@
 [package]
 name = "mbx"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Victor Dods <victor.dods@gmail.com>"]
 edition = "2024"
 
@@ -51,6 +51,7 @@ signature-dyn = { workspace = true, optional = true, features = [
     "ssi-multicodec",
 ] }
 ssi-multicodec = { workspace = true }
+zeroize = { workspace = true }
 
 [dev-dependencies]
 digest = { workspace = true }
@@ -76,12 +77,13 @@ multihash = "0.19.3"
 p256 = "0.14.0-rc.11"
 p384 = "0.14.0-rc.11"
 p521 = "0.14.0-rc.11"
-pneutype = { git = "https://github.com/vdods/pneutype", rev = "pneutype-v0.5.1" }
+pneutype = { git = "https://github.com/vdods/pneutype", rev = "pneutype-v0.6.0" }
 rand = "0.10.1"
 serde = "1.0.219"
 serde_json = "1.0.143"
 sha2 = "0.11.0"
 sha3 = "0.12.0"
 signature = "3.0.0"
-signature-dyn = { git = "https://github.com/LedgerDomain/signature-dyn", rev = "signature-dyn-v0.3.0" }
+signature-dyn = { git = "https://github.com/LedgerDomain/signature-dyn", rev = "signature-dyn-v0.4.0" }
 ssi-multicodec = "0.2.0"
+zeroize = { version = "1.8.2", features = ["zeroize_derive"] }

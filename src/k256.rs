@@ -83,7 +83,7 @@ mod tests {
             let mb_priv_key = MBPrivKey::from_k256_signing_key(base, &signing_key);
 
             println!("k256 mb_pub_key: {}", mb_pub_key);
-            println!("k256 mb_priv_key: {}", mb_priv_key);
+            println!("k256 mb_priv_key: {}", mb_priv_key.as_str());
 
             let verifying_key_decoded =
                 k256::ecdsa::VerifyingKey::try_from(&mb_pub_key).expect("pass");

@@ -1,4 +1,8 @@
-use crate::MBPubKeyStr;
+use crate::{MBXStr, PubKeyCategory};
+
+/// This newtype is a str representing a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
+/// See also `MBPubKey`.
+pub type MBPubKeyStr = MBXStr<PubKeyCategory>;
 
 impl MBPubKeyStr {
     #[cfg(feature = "signature-dyn")]

@@ -2,7 +2,7 @@ use crate::{CodecCategorizableT, Error, MBXStr};
 
 /// This newtype is a String defined to be `multibase(base, varint(codec) || bytes)`, where the codec
 /// is restricted to a specific CodecCategory.  The `X` in `MBX` signifies a placeholder.
-/// This generic type is used in type aliases for `MBPubKey` and `MBPrivKey`, and isn't really
+/// This generic type is used in the type alias for `MBPubKey`, and isn't really
 /// intended to be used directly.  See also `MBXStr`.
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, pneutype::PneuString)]
 #[pneu_string(as_pneu_str = "as_mbx_str", borrow = "MBXStr", string_field = "1")]

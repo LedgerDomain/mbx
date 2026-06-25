@@ -1,39 +1,43 @@
-use crate::{Error, MBPubKey, MBPubKeyStr, ensure, error};
+use crate::{
+    ED448_PRIV_CODEC, Error, MBPrivKey, MBPrivKeyStr, MBPubKey, MBPubKeyStr, ensure, error,
+};
 
 //
 // SigningKey
 //
 
-// NOTE: The codec ED448_PRIV does not yet exist.  See https://github.com/multiformats/multicodec/pull/390
-// impl TryFrom<&MBPrivKeyStr> for ed448_goldilocks::SigningKey {
-//     type Error = Error;
-//     fn try_from(mb_priv_key: &MBPrivKeyStr) -> Result<Self, Self::Error> {
-//         let decoded = mb_priv_key.decoded()?;
-//         ensure!(
-//             decoded.codec() == ssi_multicodec::ED448_PRIV,
-//             "Expected codec ED448_PRIV 0x({:02x}), got 0x{:02x}",
-//             ssi_multicodec::ED448_PRIV,
-//             decoded.codec()
-//         );
-//         let bytes = decoded.data();
-//         let signing_key = ed448_goldilocks::SigningKey::try_from(bytes)?;
-//         Ok(signing_key)
-//     }
-// }
+// NOTE: The codec ED448_PRIV exists but is not yet supported by the ssi_multicodec crate,
+// hence the hardcoded value.  See https://github.com/multiformats/multicodec/pull/390
+// TODO: Eventually replace ED448_PRIV_CODEC with `ssi_multicodec::ED448_PRIV`
+impl TryFrom<&MBPrivKeyStr> for ed448_goldilocks::SigningKey {
+    type Error = Error;
+    fn try_from(mb_priv_key: &MBPrivKeyStr) -> Result<Self, Self::Error> {
+        let decoded = mb_priv_key.decoded()?;
+        ensure!(
+            decoded.codec() == ED448_PRIV_CODEC,
+            "Expected codec ED448_PRIV 0x({:02x}), got 0x{:02x}",
+            ED448_PRIV_CODEC,
+            decoded.codec()
+        );
+        let bytes = decoded.data();
+        let signing_key = ed448_goldilocks::SigningKey::try_from(bytes)?;
+        Ok(signing_key)
+    }
+}
 
-// impl TryFrom<&MBPrivKey> for ed448_goldilocks::SigningKey {
-//     type Error = Error;
-//     fn try_from(mb_priv_key: &MBPrivKey) -> Result<Self, Self::Error> {
-//         Self::try_from(mb_priv_key.as_mb_priv_key_str())
-//     }
-// }
+impl TryFrom<&MBPrivKey> for ed448_goldilocks::SigningKey {
+    type Error = Error;
+    fn try_from(mb_priv_key: &MBPrivKey) -> Result<Self, Self::Error> {
+        Self::try_from(mb_priv_key.as_mb_priv_key_str())
+    }
+}
 
-// impl TryFrom<MBPrivKey> for ed448_goldilocks::SigningKey {
-//     type Error = Error;
-//     fn try_from(mb_priv_key: MBPrivKey) -> Result<Self, Self::Error> {
-//         Self::try_from(mb_priv_key.as_mb_priv_key_str())
-//     }
-// }
+impl TryFrom<MBPrivKey> for ed448_goldilocks::SigningKey {
+    type Error = Error;
+    fn try_from(mb_priv_key: MBPrivKey) -> Result<Self, Self::Error> {
+        Self::try_from(mb_priv_key.as_mb_priv_key_str())
+    }
+}
 
 //
 // VerifyingKey

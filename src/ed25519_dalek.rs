@@ -81,7 +81,7 @@ mod tests {
         let mb_priv_key = MBPrivKey::from_ed25519_dalek_signing_key(base, &signing_key);
 
         println!("ed25519_dalek mb_pub_key: {}", mb_pub_key);
-        println!("ed25519_dalek mb_priv_key: {}", mb_priv_key);
+        println!("ed25519_dalek mb_priv_key: {}", mb_priv_key.as_str());
 
         let signing_key_decoded = ed25519_dalek::SigningKey::try_from(&mb_priv_key).expect("pass");
         let verifying_key_decoded =

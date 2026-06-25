@@ -60,6 +60,18 @@ impl From<ssi_multicodec::Error> for Error {
     }
 }
 
+impl From<String> for Error {
+    fn from(s: String) -> Self {
+        Self::from_cow(s.into())
+    }
+}
+
+impl From<&str> for Error {
+    fn from(s: &str) -> Self {
+        Self::from_cow(s.to_string().into())
+    }
+}
+
 #[macro_export]
 macro_rules! error {
     ($fmt:literal) => {

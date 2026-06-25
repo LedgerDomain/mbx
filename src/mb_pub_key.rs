@@ -1,6 +1,13 @@
-use crate::MBPubKey;
+use crate::{MBPubKeyStr, MBX, PubKeyCategory};
+
+/// This newtype is a String representing a publicKeyMultibase value (see <https://www.w3.org/TR/cid-1.0/#Multikey>).
+/// See also `MBPubKeyStr`.
+pub type MBPubKey = MBX<PubKeyCategory>;
 
 impl MBPubKey {
+    pub fn as_mb_pub_key_str(&self) -> &MBPubKeyStr {
+        self.as_mbx_str()
+    }
     #[cfg(feature = "ed25519-dalek")]
     pub fn from_ed25519_dalek_verifying_key(
         base: crate::Base,

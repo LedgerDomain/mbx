@@ -83,7 +83,7 @@ mod tests {
             let mb_priv_key = MBPrivKey::from_p521_signing_key(base, &signing_key);
 
             println!("p521 mb_pub_key: {}", mb_pub_key);
-            println!("p521 mb_priv_key: {}", mb_priv_key);
+            println!("p521 mb_priv_key: {}", mb_priv_key.as_str());
 
             let verifying_key_decoded =
                 p521::ecdsa::VerifyingKey::try_from(&mb_pub_key).expect("pass");

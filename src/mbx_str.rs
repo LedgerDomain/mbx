@@ -1,4 +1,4 @@
-use crate::{CodecCategorizableT, CodecCategory, Error, ensure};
+use crate::{CodecCategorizableT, CodecCategory, ED448_PRIV_CODEC, Error, ensure};
 
 /// This newtype is a str that is defined to be `multibase(base, varint(codec) || bytes)`, where the
 /// codec is restricted to a specific CodecCategory.  The `X` in `MBXStr` signifies a placeholder.
@@ -53,78 +53,91 @@ impl<C: CodecCategorizableT> pneutype::Validate for MBXStr<C> {
     type Data = str;
     type Error = Error;
     fn validate(data: &Self::Data) -> Result<(), Self::Error> {
-        // TODO: Ideally we could simply validate the multibase string without allocating.
-        let (_decoded_base, decoded_byte_v) = multibase::decode(data)?;
-        let multi_encoded = ssi_multicodec::MultiEncodedBuf::new(decoded_byte_v)?;
-        let codec_category = CodecCategory::from_codec(multi_encoded.codec());
+        mbx_str_validate_impl(data, C::codec_category())
+    }
+}
+
+/// Validates a multibase string against an expected codec category.  This is used in multiple places in this crate.
+pub(crate) fn mbx_str_validate_impl(
+    data: &str,
+    expected_codec_category: CodecCategory,
+) -> Result<(), Error> {
+    // TODO: Ideally we could simply validate the multibase string without allocating.
+    let (_decoded_base, decoded_byte_v) = multibase::decode(data)?;
+    let multi_encoded = ssi_multicodec::MultiEncodedBuf::new(decoded_byte_v)?;
+    let codec_category = CodecCategory::from_codec(multi_encoded.codec());
+    // TODO: Could use cfg_select macro, but that requires Rust 1.95 or later.
+    #[cfg(feature = "codec-str")]
+    ensure!(
+        codec_category == expected_codec_category,
+        "expected codec {:?} (0x{:02x}) to be in category {:?} but it was in category {:?}",
+        crate::codec_str(multi_encoded.codec()),
+        multi_encoded.codec(),
+        expected_codec_category,
+        codec_category,
+    );
+    #[cfg(not(feature = "codec-str"))]
+    ensure!(
+        codec_category == expected_codec_category,
+        "expected codec 0x{:02x} to be in category {:?} but it was in category {:?}",
+        multi_encoded.codec(),
+        expected_codec_category,
+        codec_category,
+    );
+
+    // Codec-specific validation.  For now, just validate the expected byte length.
+
+    // Validate the expected byte length.
+    // References:
+    // - <https://w3c-ccg.github.io/did-key-spec/#signature-method-creation-algorithm>
+    let expected_byte_len_o = match multi_encoded.codec() {
+        // Private key types
+        ssi_multicodec::ED25519_PRIV => Some(32),
+        // NOTE: The codec ED448_PRIV is not yet supported by the ssi_multicodec crate,
+        // hence the hardcoded value.  See https://github.com/multiformats/multicodec/pull/390
+        // TODO: Eventually replace ED448_PRIV_CODEC with `ssi_multicodec::ED448_PRIV => { ... }`
+        ED448_PRIV_CODEC => Some(57),
+        ssi_multicodec::P256_PRIV => Some(32),
+        ssi_multicodec::P384_PRIV => Some(48),
+        // Reference: https://software-dl.ti.com/simplelink/esd/simplelink_lowpower_f3_sdk/8.10.00.55/exports/docs/drivers/doxygen/html/group__nistp521__params.html#ga44f08f1390d90127f0decb3c08c82664
+        ssi_multicodec::P521_PRIV => Some(66),
+        ssi_multicodec::SECP256K1_PRIV => Some(32),
+        // Public key types
+        ssi_multicodec::ED25519_PUB => Some(32),
+        ssi_multicodec::ED448_PUB => Some(57),
+        // Compressed format.
+        ssi_multicodec::P256_PUB => Some(33),
+        // Compressed format.
+        ssi_multicodec::P384_PUB => Some(49),
+        // Compressed format.
+        ssi_multicodec::P521_PUB => Some(67),
+        // Compressed format.
+        ssi_multicodec::SECP256K1_PUB => Some(33),
+        ssi_multicodec::X25519_PUB => Some(32),
+        // No checking for other types for now.
+        _ => None,
+    };
+    if let Some(expected_byte_len) = expected_byte_len_o {
         #[cfg(feature = "codec-str")]
         ensure!(
-            codec_category == C::codec_category(),
-            "expected codec {:?} (0x{:02x}) to be in category {:?} but it was in category {:?}",
+            multi_encoded.data().len() == expected_byte_len,
+            "codec {:?} (0x{:02x}) expected {} bytes but got {}",
             crate::codec_str(multi_encoded.codec()),
             multi_encoded.codec(),
-            C::codec_category(),
-            codec_category,
+            expected_byte_len,
+            multi_encoded.data().len()
         );
         #[cfg(not(feature = "codec-str"))]
         ensure!(
-            codec_category == C::codec_category(),
-            "expected codec 0x{:02x} to be in category {:?} but it was in category {:?}",
+            multi_encoded.data().len() == expected_byte_len,
+            "codec 0x{:02x} expected {} bytes but got {}",
             multi_encoded.codec(),
-            C::codec_category(),
-            codec_category,
+            expected_byte_len,
+            multi_encoded.data().len()
         );
-
-        // Codec-specific validation.  For now, just validate the expected byte length.
-
-        // Validate the expected byte length.
-        // References:
-        // - <https://w3c-ccg.github.io/did-key-spec/#signature-method-creation-algorithm>
-        let expected_byte_len_o = match multi_encoded.codec() {
-            // Private key types
-            ssi_multicodec::ED25519_PRIV => Some(32),
-            // ssi_multicodec::ED448_PRIV => Some(57),
-            ssi_multicodec::P256_PRIV => Some(32),
-            ssi_multicodec::P384_PRIV => Some(48),
-            // ssi_multicodec::P521_PRIV => Some(64),
-            ssi_multicodec::SECP256K1_PRIV => Some(32),
-            // Public key types
-            ssi_multicodec::ED25519_PUB => Some(32),
-            ssi_multicodec::ED448_PUB => Some(57),
-            // Compressed format.
-            ssi_multicodec::P256_PUB => Some(33),
-            // Compressed format.
-            ssi_multicodec::P384_PUB => Some(49),
-            // Compressed format.
-            ssi_multicodec::P521_PUB => Some(67),
-            // Compressed format.
-            ssi_multicodec::SECP256K1_PUB => Some(33),
-            ssi_multicodec::X25519_PUB => Some(32),
-            // No checking for other types for now.
-            _ => None,
-        };
-        if let Some(expected_byte_len) = expected_byte_len_o {
-            #[cfg(feature = "codec-str")]
-            ensure!(
-                multi_encoded.data().len() == expected_byte_len,
-                "codec {:?} (0x{:02x}) expected {} bytes but got {}",
-                crate::codec_str(multi_encoded.codec()),
-                multi_encoded.codec(),
-                expected_byte_len,
-                multi_encoded.data().len()
-            );
-            #[cfg(not(feature = "codec-str"))]
-            ensure!(
-                multi_encoded.data().len() == expected_byte_len,
-                "codec 0x{:02x} expected {} bytes but got {}",
-                multi_encoded.codec(),
-                expected_byte_len,
-                multi_encoded.data().len()
-            );
-        }
-
-        Ok(())
     }
+
+    Ok(())
 }
 
 #[cfg(test)]
