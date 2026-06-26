@@ -714,7 +714,7 @@ dependencies = [
 
 [[package]]
 name = "mbx"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "blake3",
  "digest",
@@ -741,7 +741,7 @@ dependencies = [
 
 [[package]]
 name = "mbx-bin"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "blake3",
  "clap",
@@ -1092,8 +1092,8 @@ dependencies = [
 
 [[package]]
 name = "signature-dyn"
-version = "0.4.0"
-source = "git+https://github.com/LedgerDomain/signature-dyn?rev=signature-dyn-v0.4.0#b7236aa45a6553ce1561fa831fcd4058fb7c74be"
+version = "0.5.0"
+source = "git+https://github.com/LedgerDomain/signature-dyn?rev=signature-dyn-v0.5.0#086e78ed4118614278f88a7b10e40bf7cb5c5d1b"
 dependencies = [
  "ssi-multicodec",
  "zeroize",

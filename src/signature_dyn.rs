@@ -4,21 +4,21 @@ use crate::{Error, MBPrivKey, MBPrivKeyStr, MBPubKey, MBPubKeyStr};
 // SignerBytes
 //
 
-impl<'a> TryFrom<&MBPrivKey> for signature_dyn::SignerBytes<'a> {
+impl TryFrom<&MBPrivKey> for signature_dyn::SignerBytes {
     type Error = Error;
     fn try_from(mb_priv_key: &MBPrivKey) -> std::result::Result<Self, Self::Error> {
         Self::try_from(mb_priv_key.as_mb_priv_key_str())
     }
 }
 
-impl<'a> TryFrom<MBPrivKey> for signature_dyn::SignerBytes<'a> {
+impl TryFrom<MBPrivKey> for signature_dyn::SignerBytes {
     type Error = Error;
     fn try_from(mb_priv_key: MBPrivKey) -> std::result::Result<Self, Self::Error> {
         Self::try_from(mb_priv_key.as_mb_priv_key_str())
     }
 }
 
-impl<'a> TryFrom<&MBPrivKeyStr> for signature_dyn::SignerBytes<'a> {
+impl TryFrom<&MBPrivKeyStr> for signature_dyn::SignerBytes {
     type Error = Error;
     fn try_from(mb_priv_key_str: &MBPrivKeyStr) -> std::result::Result<Self, Self::Error> {
         let decoded = mb_priv_key_str.decoded().expect("programmer error");
